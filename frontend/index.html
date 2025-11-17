@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Denier AI</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="chat-wrapper">
+    <!-- Header -->
+    <div class="chat-header">
+      <h1>💬 Denier</h1>
+      <p>Your debate sparring partner powered by Azure OpenAI</p>
+    </div>
+
+    <!-- Chat messages area -->
+    <div class="chat-box" id="chatMessages">
+      <div class="message assistant">
+        <div class="avatar">🤖</div>
+        <div class="message-content">
+          Hello! I’m your Denier. Tell me an opinion and I’ll refute it.
+        </div>
+      </div>
+    </div>
+
+    <!-- Input form -->
+    <form id="chatForm" class="chat-input-area">
+      <input
+        id="userInput"
+        type="text"
+        placeholder="Enter your opinion..."
+        autocomplete="off"
+      />
+      <button class="send-btn" type="submit">Send</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
