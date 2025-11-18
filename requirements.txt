@@ -1,6 +1,0 @@
-fastapi
-uvicorn[standard]==0.32.0
-python-dotenv
-pydantic
-agent-framework
-azure-identity
