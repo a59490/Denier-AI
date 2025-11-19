@@ -3,13 +3,21 @@ const API_URL = "http://localhost:8000";
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatMessages = document.getElementById("chatMessages");
+const suggestionsContainer = document.getElementById("suggestionsContainer");
+const suggestionsList = document.getElementById("suggestionsList");
 
 let conversationHistory = [];
+let suggestionsLoaded = false;
 
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const message = userInput.value.trim();
   if (!message) return;
+
+  // Hide suggestions after first message
+  if (suggestionsContainer) {
+    suggestionsContainer.classList.add("hidden");
+  }
 
   // Add user message
   addMessageToUI(message, "user");
@@ -63,16 +71,50 @@ function addMessageToUI(message, role) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Backend health check
+// Load suggestions from backend
+async function loadSuggestions() {
+  try {
+    const response = await fetch(`${API_URL}/suggestions`);
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+
+    data.suggestions.forEach((suggestion) => {
+      const chip = document.createElement("div");
+      chip.className = "suggestion-chip";
+      chip.textContent = suggestion;
+      chip.addEventListener("click", () => {
+        userInput.value = suggestion;
+        userInput.focus();
+      });
+      suggestionsList.appendChild(chip);
+    });
+
+    suggestionsLoaded = true;
+  } catch (error) {
+    console.error("Failed to load suggestions:", error);
+    // Hide suggestions container if loading fails
+    if (suggestionsContainer) {
+      suggestionsContainer.classList.add("hidden");
+    }
+  }
+}
+
+// Backend health check and load suggestions
 window.addEventListener("load", async () => {
   try {
     const response = await fetch(`${API_URL}/health`);
     if (!response.ok) throw new Error();
+    // Load suggestions if backend is healthy
+    await loadSuggestions();
   } catch {
     addMessageToUI(
       "⚠️ Backend not reachable. Start it with: python main.py",
       "assistant"
     );
+    // Hide suggestions if backend is down
+    if (suggestionsContainer) {
+      suggestionsContainer.classList.add("hidden");
+    }
   }
 });
 
