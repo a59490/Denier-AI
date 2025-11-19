@@ -100,6 +100,19 @@ async def health():
     return {"status": "ok", "framework": "Microsoft Agent Framework"}
 
 
+@app.get("/suggestions")
+async def get_suggestions():
+    """Get conversation starter suggestions"""
+    return {
+        "suggestions": [
+            "The sky is blue",
+            "Pizza is better than burgers",
+            "Coffee is the best morning drink",
+            "1 plus 1 equals 2",
+        ]
+    }
+
+
 @app.post("/chat")
 async def chat(request: ChatRequest):
     """
